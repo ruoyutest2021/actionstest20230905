@@ -1,28 +1,20 @@
 #!/bin/bash -e
-#
-# GNU Bash required for process substitution `<()` later.
-#
-# Environment variables:
-#
-# - `GITHUB_ACTION_PATH`: path to this repository.
-# - `GITHUB_ACTOR`: GitHub username of whoever triggered the action.
-# - `GITHUB_WORKSPACE`: default path for the workflow (the tmux session will start there).
-#
 
 cd "$GITHUB_ACTION_PATH"
-
 kernel="$(uname -s)"
-if [[ "$kernel" = "Darwin" ]]; then
-  brew install tmux
-fi
 
 case "$kernel" in
 Linux)
+  sudo apt-get update
+  sudo apt-get install -y tmux
+
   cloudflared_url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
   echo "Downloading \`cloudflared\` from <$cloudflared_url>..."
   curl --location --silent --output cloudflared "$cloudflared_url"
   ;;
 Darwin)
+  brew install tmux
+
   cloudflared_url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-amd64.tgz"
   echo "Downloading \`cloudflared\` from <$cloudflared_url>..."
   curl --location --silent --output cloudflared.tgz "$cloudflared_url"
