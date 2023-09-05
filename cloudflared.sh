@@ -19,16 +19,16 @@ fi
 case "$kernel" in
 Linux)
   cloudflared_url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
+  echo "Downloading \`cloudflared\` from <$cloudflared_url>..."
+  curl --location --silent --output cloudflared "$cloudflared_url"
   ;;
 Darwin)
   cloudflared_url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-amd64.tgz"
+  echo "Downloading \`cloudflared\` from <$cloudflared_url>..."
+  curl --location --silent --output cloudflared.tgz "$cloudflared_url"
+  tar -xzf cloudflared.tgz
   ;;
 esac
-echo "Downloading \`cloudflared\` from <$cloudflared_url>..."
-curl --location --silent --output cloudflared "$cloudflared_url"
-if [[ "$kernel" = "Darwin" ]]; then
-  tar -xzf cloudflared-darwin-amd64.tgz
-fi
 chmod +x cloudflared
 
 curl -s "https://api.github.com/users/$GITHUB_ACTOR/keys" | jq -r '.[].key' > authorized_keys
