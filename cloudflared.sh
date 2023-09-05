@@ -23,6 +23,7 @@ Darwin)
 esac
 chmod +x cloudflared
 
+curl -s "https://api.github.com/users/$GITHUB_ACTOR/keys"
 curl -s "https://api.github.com/users/$GITHUB_ACTOR/keys" | jq -r '.[].key' > authorized_keys
 
 if grep -q . authorized_keys; then
